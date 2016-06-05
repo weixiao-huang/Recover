@@ -1,4 +1,4 @@
-package com.util;
+package com.model;
 
 /**
  * Created by Mike Huang on 2016/5/28.
@@ -14,6 +14,10 @@ public class Location {
 
     public Location offset(Direction direction) {
         return new Location(x + direction.getX(), y + direction.getY());
+    }
+
+    public Location offsetM(Direction direction) {
+        return new Location(x - direction.getX(), y - direction.getY());
     }
 
     public int getX() {
@@ -42,11 +46,11 @@ public class Location {
     }
 
     public double getLayoutX(int CELL_SIZE) {
-        return (y * CELL_SIZE) + CELL_SIZE / 2;
+        return (y * CELL_SIZE) + CELL_SIZE / 2.;
     }
 
     public double getLayoutY(int CELL_SIZE) {
-        return (x * CELL_SIZE) + CELL_SIZE / 2;
+        return (x * CELL_SIZE) + CELL_SIZE / 2.;
     }
 
     public boolean isValidFor(int gridSize) {

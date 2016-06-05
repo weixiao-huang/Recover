@@ -22,14 +22,13 @@ public class MainWindow extends Application {
         root = new MainPane();
 
         Scene scene = new Scene(root);
-        scene.getStylesheets().add("./com/gui/style.css");
+        scene.getStylesheets().add("com/style.css");
 
         Bounds gameBounds = root.getGameManager().getLayoutBounds();
         int MARGIN = MainPane.getMARGIN();
         Rectangle2D visualBounds = Screen.getPrimary().getVisualBounds();
         double factor = Math.min(visualBounds.getWidth() / (gameBounds.getWidth() + MARGIN),
                 visualBounds.getHeight() / (gameBounds.getHeight() + MARGIN));
-
 
         primaryStage.setTitle("Recover");
         primaryStage.setScene(scene);
@@ -40,7 +39,7 @@ public class MainWindow extends Application {
 
         primaryStage.setOnCloseRequest(t->{
             t.consume();
-            //
+            root.getGameManager().quitGame();
         });
         primaryStage.show();
     }
