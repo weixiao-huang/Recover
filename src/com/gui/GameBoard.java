@@ -16,7 +16,6 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
@@ -34,6 +33,7 @@ import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
+import com.util.GameManager;
 /**
  * Created by Mike Huang on 2016/5/27.
  */
@@ -97,11 +97,9 @@ public class GameBoard extends Group {
 
     private final int gridWidth;
     private final GridOperator gridOperator;
-
     public GameBoard(GridOperator gridOperator) {
         this.gridOperator = gridOperator;
         gridWidth = CELL_SIZE * gridOperator.getGridSize() + (BORDER_WIDTH << 1);
-
         createStep();
         createGrid();
 
@@ -332,6 +330,7 @@ public class GameBoard extends Group {
 
     private void doChangeSize() {
         currentSelectGridSize.set((int)comboBox.getValue());
+        GameModel.resetSize.run(currentSelectGridSize.intValue());
     }
 
 
@@ -493,6 +492,7 @@ public class GameBoard extends Group {
         gameTryAgainProperty.set(false);
         gamePauseProperty.set(false);
         gameLoadProperty.set(false);
+        gameSizeClickedProperty.set(false);
 
         clearGame.set(true);
     }

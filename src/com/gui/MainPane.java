@@ -1,6 +1,7 @@
 package com.gui;
 
 import com.model.Direction;
+import com.model.GameModel;
 import com.util.GameManager;
 import javafx.beans.value.ChangeListener;
 import javafx.event.ActionEvent;
@@ -32,8 +33,28 @@ public class MainPane extends StackPane {
 //        Font.loadFont(MainWindow.class.getResource("ClearSans-Bold.ttf").toExternalForm(), 10.0);
 //    }
 
-    public MainPane() {
-        gameManager = new GameManager();
+    public class ResetSize{
+        public ResetSize(){}
+        public void run(int newSize){
+            init(newSize);
+        }
+    }
+
+    public void init(){
+        this.init(GameModel.DEFAULT_GRID_SIZE);
+    }
+    public void Resize(){
+        double scale = Math.min((getWidth() - MARGIN) / gameBounds.getWidth(),
+                (getHeight() - MARGIN) / gameBounds.getHeight());
+        gameManager.setScale(scale);
+        gameManager.setLayoutX((getWidth() - gameBounds.getWidth()) / 2d);
+        gameManager.setLayoutY((getHeight() - gameBounds.getHeight()) / 2d);
+    }
+    public void init(int gridSize){
+        this.getChildren().clear();
+
+        GameModel.resetSize = new ResetSize();
+        gameManager = new GameManager(gridSize);
         gameManager.setToolBar(createToolBar());
         gameBounds = gameManager.getLayoutBounds();
 
@@ -43,15 +64,15 @@ public class MainPane extends StackPane {
 
         // Window Resize
         ChangeListener<Number> resize = (ov, v, v1) -> {
-            double scale = Math.min((getWidth() - MARGIN) / gameBounds.getWidth(),
-                                    (getHeight() - MARGIN) / gameBounds.getHeight());
-            gameManager.setScale(scale);
-            gameManager.setLayoutX((getWidth() - gameBounds.getWidth()) / 2d);
-            gameManager.setLayoutY((getHeight() - gameBounds.getHeight()) / 2d);
+            Resize();
         };
         widthProperty().addListener(resize);
         heightProperty().addListener(resize);
+        Resize();
+    }
 
+    public MainPane() {
+        init();
 
         addKeyHandlers(this);
 

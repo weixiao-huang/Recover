@@ -1,6 +1,7 @@
 package com.util;
 
 import com.gui.GameBoard;
+import com.gui.MainPane;
 import com.gui.Piece;
 import com.model.Direction;
 import com.model.GameModel;
@@ -22,7 +23,7 @@ public class GameManager extends Group {
     private static final Duration ANIMATION_MOVE_TO_NEAR = Duration.millis(65);
 
     private volatile boolean movingPiece = false;
-    private final Map<Location, Piece> gameGrid;
+    private Map<Location, Piece> gameGrid;
     private final List<Location> locations = new ArrayList<>();
 
     private GameBoard gameBoard;
@@ -32,7 +33,7 @@ public class GameManager extends Group {
         this(GameModel.DEFAULT_GRID_SIZE);
     }
 
-    public GameManager(int gridSize) {
+    public void GameManagerInit(int gridSize){
         this.gridSize = gridSize;
         this.gameGrid = new HashMap<>();
 
@@ -62,8 +63,10 @@ public class GameManager extends Group {
 
         initializeGameGrid();
         startGame();
+    }
 
-
+    public GameManager(int gridSize) {
+        GameManagerInit(gridSize);
     }
 
     private void initializeGameGrid() {

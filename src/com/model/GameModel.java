@@ -1,18 +1,19 @@
 package com.model;
 
 import com.gui.Piece;
+import com.gui.MainPane;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-
 /**
  * Created by Mike Huang on 2016/6/4.
  */
 public class GameModel {
-    public static final int DEFAULT_GRID_SIZE = 4;
+    public static final int DEFAULT_GRID_SIZE = 3;
+    public static MainPane.ResetSize resetSize;
 
     public static List<Piece> REFRESH_MODEL(int gridSize) {
         List<Integer> numList = createModel(gridSize);
@@ -69,14 +70,13 @@ public class GameModel {
 
     private static int inverseNumber(List<Integer> list) {
         int num = 0;
+
         for (int i = 0; i < list.size() - 1; i++) {
-            if (list.get(i+1) == 0) {
-                if (i+2 < list.size())
-                    if (list.get(i) > list.get(i+2))
-                        num++;
-            }else if (list.get(i) > list.get(i+1))
-                num++;
+            for (int j = i + 1; j < list.size(); j++) {
+                if (list.get(i) > list.get(j) && list.get(j) != 0) num++;
+            }
         }
+
         return num;
     }
 }
