@@ -25,8 +25,8 @@ public class GameManager extends Group {
     private final Map<Location, Piece> gameGrid;
     private final List<Location> locations = new ArrayList<>();
 
-    private final GameBoard gameBoard;
-    private final GridOperator gridOperator;
+    private GameBoard gameBoard;
+    private GridOperator gridOperator;
 
     public GameManager() {
         this(GameModel.DEFAULT_GRID_SIZE);
@@ -52,8 +52,18 @@ public class GameManager extends Group {
             }
         }));
 
+        gameBoard.changeSizeProperty().addListener(((observable, oldValue, newValue) -> {
+            if (newValue.intValue() != oldValue.intValue()) {
+                this.gridSize = newValue.intValue();
+                initializeGameGrid();
+                startGame();
+            }
+        }));
+
         initializeGameGrid();
         startGame();
+
+
     }
 
     private void initializeGameGrid() {
@@ -167,13 +177,13 @@ public class GameManager extends Group {
         gameBoard.changeSize();
     }
 
-    public void saveSession() {
-        gameBoard.saveSession();
-    }
+//    public void saveSession() {
+//        gameBoard.saveSession();
+//    }
 
-    public void restoreSession() {
-
-    }
+//    public void restoreSession() {
+//
+//    }
 
     public void pauseGame() {
         gameBoard.pauseGame();

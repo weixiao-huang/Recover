@@ -105,7 +105,7 @@
     -fx-text-fill: #f65e3b;
 }
 
-.game-label-about {
+.game-label-about, .game-label-size {
     -fx-font-size: 24px;
     -fx-fill: #776e65;
 }
@@ -137,35 +137,50 @@
 }
 
 
+#mSize {
+    -fx-shape: "M6 2v24h24v-24h-24zM28 24h-20v-20h20v20zM4 28v-21l-2-2v25h25l-2-2h-21z M11 8l5 5-6 6 3 3 6-6 5 5v-13z";
+    -fx-background-color: #f9f6f2;
+    -fx-scale-x: 1.0;
+    -fx-scale-y: 1.0;
+    -fx-focus-traversable: true;
+}
+#mSize:hover {
+    -fx-effect: dropshadow(gaussian,derive(#776e65,-20%),10,0.5,0,0);
+}
+#mSize:pressed {
+    -fx-translate-y: 2px;
+    -fx-effect: dropshadow(gaussian,derive(-fx-focus-color,-20%),10,0.5,0,0);
+}
 
-#mSave {
-    -fx-shape: "M16 18l8-8h-6v-8h-4v8h-6zM23.273 14.727l-2.242 2.242 8.128 3.031-13.158 4.907-13.158-4.907 8.127-3.031-2.242-2.242-8.727 3.273v8l16 6 16-6v-8z";
-    -fx-background-color: #f9f6f2;
-    -fx-scale-x: 1.0;
-    -fx-scale-y: 1.0;
-    -fx-focus-traversable: true;
-}
-#mSave:hover {
-    -fx-effect: dropshadow(gaussian,derive(#776e65,-20%),10,0.5,0,0);
-}
-#mSave:pressed {
-    -fx-translate-y: 2px;
-    -fx-effect: dropshadow(gaussian,derive(-fx-focus-color,-20%),10,0.5,0,0);
-}
-#mRestore {
-    -fx-shape: "M0 28h32v2h-32zM32 24v2h-32v-2l4-8h8v4h8v-4h8zM7 10l9-9 9 9h-7v8h-4v-8z";
-    -fx-background-color: #f9f6f2;
-    -fx-scale-x: 1.0;
-    -fx-scale-y: 1.0;
-    -fx-focus-traversable: true;
-}
-#mRestore:hover {
-    -fx-effect: dropshadow(gaussian,derive(#776e65,-20%),10,0.5,0,0);
-}
-#mRestore:pressed {
-    -fx-translate-y: 2px;
-    -fx-effect: dropshadow(gaussian,derive(-fx-focus-color,-20%),10,0.5,0,0);
-}
+/*#mSave {*/
+    /*-fx-shape: "M16 18l8-8h-6v-8h-4v8h-6zM23.273 14.727l-2.242 2.242 8.128 3.031-13.158 4.907-13.158-4.907 8.127-3.031-2.242-2.242-8.727 3.273v8l16 6 16-6v-8z";*/
+    /*-fx-background-color: #f9f6f2;*/
+    /*-fx-scale-x: 1.0;*/
+    /*-fx-scale-y: 1.0;*/
+    /*-fx-focus-traversable: true;*/
+/*}*/
+/*#mSave:hover {*/
+    /*-fx-effect: dropshadow(gaussian,derive(#776e65,-20%),10,0.5,0,0);*/
+/*}*/
+/*#mSave:pressed {*/
+    /*-fx-translate-y: 2px;*/
+    /*-fx-effect: dropshadow(gaussian,derive(-fx-focus-color,-20%),10,0.5,0,0);*/
+/*}*/
+/*#mRestore {*/
+    /*-fx-shape: "M0 28h32v2h-32zM32 24v2h-32v-2l4-8h8v4h8v-4h8zM7 10l9-9 9 9h-7v8h-4v-8z";*/
+    /*-fx-background-color: #f9f6f2;*/
+    /*-fx-scale-x: 1.0;*/
+    /*-fx-scale-y: 1.0;*/
+    /*-fx-focus-traversable: true;*/
+/*}*/
+/*#mRestore:hover {*/
+    /*-fx-effect: dropshadow(gaussian,derive(#776e65,-20%),10,0.5,0,0);*/
+/*}*/
+/*#mRestore:pressed {*/
+    /*-fx-translate-y: 2px;*/
+    /*-fx-effect: dropshadow(gaussian,derive(-fx-focus-color,-20%),10,0.5,0,0);*/
+/*}*/
+
 #mPause {
     -fx-shape: "M16 0c-8.837 0-16 7.163-16 16s7.163 16 16 16 16-7.163 16-16-7.163-16-16-16zM16 29c-7.18 0-13-5.82-13-13s5.82-13 13-13 13 5.82 13 13-5.82 13-13 13zM10 10h4v12h-4zM18 10h4v12h-4z";
     -fx-background-color: #f9f6f2;

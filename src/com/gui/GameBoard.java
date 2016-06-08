@@ -1,5 +1,6 @@
 package com.gui;
 
+import com.model.GameModel;
 import com.util.GridOperator;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
@@ -9,10 +10,14 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.property.*;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
@@ -33,18 +38,18 @@ import java.time.format.DateTimeFormatter;
  * Created by Mike Huang on 2016/5/27.
  */
 public class GameBoard extends Group {
+
     public static final int CELL_SIZE = 128;
     private static final int BORDER_WIDTH = (14 + 2) >> 1;
     private static final int TOP_HEIGHT = 92;
     public static final int GAP_HEIGHT = 50;
     public static final int TOOLBAR_HEIGHT = 80;
 
+    private final IntegerProperty currentSelectGridSize = new SimpleIntegerProperty(GameModel.DEFAULT_GRID_SIZE);
     private final IntegerProperty gameStepProperty = new SimpleIntegerProperty(0);
-    private final IntegerProperty gameSizeProperty = new SimpleIntegerProperty(0);
     private final IntegerProperty gameBestProperty = new SimpleIntegerProperty(0);
-    private final IntegerProperty gameMovePoints = new SimpleIntegerProperty(0);
+    private final BooleanProperty gameSizeClickedProperty = new SimpleBooleanProperty(false);
     private final BooleanProperty gameWonProperty = new SimpleBooleanProperty(false);
-    private final BooleanProperty gameOverProperty = new SimpleBooleanProperty(false);
     private final BooleanProperty gameAboutProperty = new SimpleBooleanProperty(false);
     private final BooleanProperty gamePauseProperty = new SimpleBooleanProperty(false);
     private final BooleanProperty gameTryAgainProperty = new SimpleBooleanProperty(false);
@@ -73,7 +78,7 @@ public class GameBoard extends Group {
     private final HBox toolBar = new HBox();
 
     private final HBox overlay = new HBox();
-    private final VBox overlayTxt = new VBox(10);
+    private final VBox overlayTxt = new VBox();
     private final Label overlayTitle = new Label();
     private final Label overlaySubTitle = new Label();
     private final HBox overlayBtns = new HBox();
@@ -83,6 +88,9 @@ public class GameBoard extends Group {
     private final Button btSave = new Button("Save");
     private final Button btLoad = new Button("Load");
     private final Button btQuit = new Button("Quit");
+    private final Button btConfirm = new Button("Confirm");
+    private final VBox overlayComb = new VBox();
+    private ComboBox comboBox = new ComboBox();
 
     private final Label lblTime=new Label();
     private Timeline timerPause;
@@ -242,29 +250,24 @@ public class GameBoard extends Group {
         return resetGame;
     }
 
+    public IntegerProperty changeSizeProperty() {
+        return currentSelectGridSize;
+    }
+
     public BooleanProperty clearGameProperty() {
         return clearGame;
     }
 
-    public boolean saveSession() {
-        if (!gameSaveProperty.get()) {
-            gameSaveProperty.set(true);
-        }
-        return true;
-    }
 
     public void addStep(int num) {
         gameStepProperty.set(gameStepProperty.get() + num);
-    }
-
-    public void changeSize() {
-
     }
 
     private void continueGame() {
         timerPause.stop();
         overlayOnProperty.set(false);
         gamePauseProperty.set(false);
+        gameSizeClickedProperty.set(false);
         gameTryAgainProperty.set(false);
         gameSaveProperty.set(false);
         gameLoadProperty.set(false);
@@ -319,7 +322,18 @@ public class GameBoard extends Group {
                 quit();
             }
         });
+        setOverlayBtn(btConfirm, new Runnable() {
+            @Override
+            public void run() {
+                doChangeSize();
+            }
+        });
     }
+
+    private void doChangeSize() {
+        currentSelectGridSize.set((int)comboBox.getValue());
+    }
+
 
     private void initialListener() {
         gameWonProperty.addListener(wonListener);
@@ -327,12 +341,14 @@ public class GameBoard extends Group {
                 btContinue, null, "game-overlay-pause", "game-label-pause", false));
         gameTryAgainProperty.addListener(new Overlay("Try Again?", "Current game will be abandoned",
                 btTry, btContinue, "game-overlay-pause", "game-label-pause", true));
-        gameSaveProperty.addListener(new Overlay("Save Game?", "Previous save data will be overwritten",
-                btSave, btContinue, "game-overlay-pause", "game-label-pause", true));
-        gameLoadProperty.addListener(new Overlay("Load Game?", "Current game will be abandoned",
-                btLoad, btContinue, "game-overlay-pause", "game-label-pause", true));
+//        gameSaveProperty.addListener(new Overlay("Save Game?", "Previous save data will be overwritten",
+//                btSave, btContinue, "game-overlay-pause", "game-label-pause", true));
+//        gameLoadProperty.addListener(new Overlay("Load Game?", "Current game will be abandoned",
+//                btLoad, btContinue, "game-overlay-pause", "game-label-pause", true));
         gameQuitProperty.addListener(new Overlay("Quit Game", "Current Game Will be Abandoned",
                 btQuit, btContinueNo, "game-overlay-pause", "game-label-quit", true));
+        gameSizeClickedProperty.addListener(new SizeOverlay("Change Grid Size", "Select another grid size\n notice current game will be abandoned",
+                btConfirm, btContinue, "game-overlay-size", "game-label-size", true));
 
         gameAboutProperty.addListener((observable, oldValue, newValue) -> {
             if (newValue) {
@@ -435,6 +451,12 @@ public class GameBoard extends Group {
         }
     }
 
+    public void changeSize() {
+        if (!gameSizeClickedProperty.get()) {
+            gameSizeClickedProperty.set(true);
+        }
+    }
+
     public void setGameWin(boolean won) {
         if (!gameWonProperty.get()) {
             gameWonProperty.set(won);
@@ -454,7 +476,7 @@ public class GameBoard extends Group {
     }
 
     private void doClearGame() {
-        saveRecord();
+//        saveRecord();
         gridGroup.getChildren().removeIf(c -> c instanceof  Piece);
         this.getChildren().removeAll(overlay, overlayBtns);
 
@@ -475,9 +497,17 @@ public class GameBoard extends Group {
         clearGame.set(true);
     }
 
-    private void saveRecord() {
+//    private void saveRecord() {
+//
+//    }
 
-    }
+
+//    public boolean saveSession() {
+//        if (!gameSaveProperty.get()) {
+//            gameSaveProperty.set(true);
+//        }
+//        return true;
+//    }
 
     private final Overlay wonListener = new Overlay("Fantastic! You Win!", "",
             btContinue, btTry, "game-overlay-won", "game-label-won", true);
@@ -488,13 +518,50 @@ public class GameBoard extends Group {
         }
     }
 
+    private class SizeOverlay extends Overlay {
+        private final ObservableList<Integer> options;
+
+        public SizeOverlay(String msg, String warning, Button b1, Button b2, String sty1, String sty2, boolean pause) {
+            super(msg, warning, b1, b2, sty1, sty2, pause);
+             options = FXCollections.observableArrayList(3, 4, 5, 6, 7, 8, 9, 10);
+             comboBox = new ComboBox(options);
+        }
+
+        @Override
+        public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+            if (newValue) {
+                timer.stop();
+                if (pause) {
+                    timerPause.play();
+                }
+                overlay.getStyleClass().setAll("game-overlay", sty1);
+                overlayTitle.setText(msg);
+                overlayTitle.getStyleClass().setAll("game-label", sty2);
+                overlaySubTitle.setText(warning);
+                overlaySubTitle.getStyleClass().setAll("game-label", "game-label-warning");
+                comboBox.setVisibleRowCount(3);
+                comboBox.setValue(options.get(0));
+//                overlayComb.getChildren().add(comboBox);
+//                comboBox.getStyleClass().setAll("game-changeSize-comBox");
+                overlayTxt.getChildren().setAll(comboBox);
+                overlayBtns.getChildren().setAll(btn1);
+                if (btn2 != null) {
+                    overlayBtns.getChildren().add(btn2);
+                }
+                if (!overlayOnProperty.get()) {
+                    GameBoard.this.getChildren().addAll(overlay, overlayBtns);
+                    overlayOnProperty.set(true);
+                }
+            }
+        }
+    }
 
     private class Overlay implements ChangeListener<Boolean> {
 
-        private final String msg, warning;
-        private final String sty1, sty2;
-        private final Button btn1, btn2;
-        private final boolean pause;
+        protected String msg, warning;
+        protected String sty1, sty2;
+        protected Button btn1, btn2;
+        protected boolean pause;
 
         public Overlay(String msg, String warning, Button b1, Button b2, String sty1, String sty2, boolean pause) {
             this.msg = msg; this.warning = warning;

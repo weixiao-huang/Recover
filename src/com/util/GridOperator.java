@@ -42,4 +42,5 @@ public class GridOperator {
 
         return atomicInteger.get();
     }
+
 }

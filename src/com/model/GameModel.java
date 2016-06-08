@@ -12,7 +12,7 @@ import java.util.stream.IntStream;
  * Created by Mike Huang on 2016/6/4.
  */
 public class GameModel {
-    public static final int DEFAULT_GRID_SIZE = 3;
+    public static final int DEFAULT_GRID_SIZE = 4;
 
     public static List<Piece> REFRESH_MODEL(int gridSize) {
         List<Integer> numList = createModel(gridSize);
@@ -56,13 +56,14 @@ public class GameModel {
         } else {
             List<Integer> zigZagList = new ArrayList<>();
             for (int i = 0; i < gridSize * gridSize; i++) {
-                if (i / gridSize % 2 == 0) {
+                if ((i / gridSize) % 2 == 0) {
                     list.add(numList.get(i));
                 } else {
-                    list.add(numList.get(gridSize - i % gridSize + i / gridSize - 1));
+                    list.add(numList.get((i / gridSize + 1) * gridSize - i % gridSize - 1));
                 }
             }
         }
+        System.out.println(list);
         return (inverseNumber(list) - gridSize) % 2 == 1;
     }
 
