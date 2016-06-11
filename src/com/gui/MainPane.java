@@ -101,8 +101,6 @@ public class MainPane extends StackPane {
         toolBar.setPadding(new Insets(10.0));
 
         Button btItem0 = createButtonItem("mSize", "Change Size", t -> gameManager.changeSize());
-//        Button btItem1 = createButtonItem("mSave", "Save Session", t -> gameManager.saveSession());
-//        Button btItem2 = createButtonItem("mRestore", "Restore Session", t-> gameManager.restoreSession());
         Button btItem3 = createButtonItem("mPause", "Pause Game", t -> gameManager.pauseGame());
         Button btItem4 = createButtonItem("mReplay", "Try Again", t -> gameManager.tryAgain());
         Button btItem5 = createButtonItem("mInfo", "About the Game", t -> gameManager.aboutGame());

@@ -52,8 +52,4 @@ public class Location {
     public double getLayoutY(int CELL_SIZE) {
         return (x * CELL_SIZE) + CELL_SIZE / 2.;
     }
-
-    public boolean isValidFor(int gridSize) {
-        return x >= 0 && x < gridSize && y >= 0 && y < gridSize;
-    }
 }

@@ -1,7 +1,6 @@
 package com.util;
 
 import com.gui.GameBoard;
-import com.gui.MainPane;
 import com.gui.Piece;
 import com.model.Direction;
 import com.model.GameModel;

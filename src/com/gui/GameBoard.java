@@ -89,7 +89,6 @@ public class GameBoard extends Group {
     private final Button btLoad = new Button("Load");
     private final Button btQuit = new Button("Quit");
     private final Button btConfirm = new Button("Confirm");
-    private final VBox overlayComb = new VBox();
     private ComboBox comboBox = new ComboBox();
 
     private final Label lblTime=new Label();
@@ -333,7 +332,6 @@ public class GameBoard extends Group {
         GameModel.resetSize.run(currentSelectGridSize.intValue());
     }
 
-
     private void initialListener() {
         gameWonProperty.addListener(wonListener);
         gamePauseProperty.addListener(new Overlay("Game Paused", "",
@@ -497,26 +495,15 @@ public class GameBoard extends Group {
         clearGame.set(true);
     }
 
-//    private void saveRecord() {
-//
-//    }
-
-
-//    public boolean saveSession() {
-//        if (!gameSaveProperty.get()) {
-//            gameSaveProperty.set(true);
-//        }
-//        return true;
-//    }
-
-    private final Overlay wonListener = new Overlay("Fantastic! You Win!", "",
-            btContinue, btTry, "game-overlay-won", "game-label-won", true);
-
     public void tryAgain() {
         if (!gameTryAgainProperty.get()) {
             gameTryAgainProperty.set(true);
         }
     }
+
+    private final Overlay wonListener = new Overlay("Fantastic! You Win!", "",
+            btContinue, btTry, "game-overlay-won", "game-label-won", true);
+
 
     private class SizeOverlay extends Overlay {
         private final ObservableList<Integer> options;
