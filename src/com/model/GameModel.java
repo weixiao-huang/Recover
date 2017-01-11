@@ -55,7 +55,6 @@ public class GameModel {
         if (gridSize % 2 == 1) {
             list = numList;
         } else {
-            List<Integer> zigZagList = new ArrayList<>();
             for (int i = 0; i < gridSize * gridSize; i++) {
                 if ((i / gridSize) % 2 == 0) {
                     list.add(numList.get(i));
@@ -63,6 +62,7 @@ public class GameModel {
                     list.add(numList.get((i / gridSize + 1) * gridSize - i % gridSize - 1));
                 }
             }
+            gridSize /= gridSize;
         }
         System.out.println(list);
         return (inverseNumber(list) - gridSize) % 2 == 1;

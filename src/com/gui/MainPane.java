@@ -63,7 +63,7 @@ public class MainPane extends StackPane {
         this.getStyleClass().add("game-root");
 
         // Window Resize
-        ChangeListener<Number> resize = (ov, v, v1) -> {
+        ChangeListener<Number> resize = (observable, oldValue, newValue) -> {
             Resize();
         };
         widthProperty().addListener(resize);
